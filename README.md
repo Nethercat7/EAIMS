@@ -10,4 +10,4 @@ E.A.I.M.S.教务信息管理系统，是一款面向信息管理员，集成教�
 - Windows 10
 
 #功能设计
-[!系统功能结构图](src/pres/zfy/eaims/images/系统功能结构图.png "系统功能结构图")
+![系统功能结构图](https://github.com/sourceice/EAIMS/blob/master/src/pres/zfy/eaims/images/%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD%E7%BB%93%E6%9E%84%E5%9B%BE.png?raw=true "系统功能结构图"")
