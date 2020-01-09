@@ -209,7 +209,32 @@ public class CollegeModule {
             }
         } catch (SQLException e) {
             System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
         }
         return name;
+    }
+
+    /**
+    *@param
+    *@Author 赵富源
+    *@Description 查询所有的院系ID
+    *@Return int
+    */
+    public static List<Integer> queryAllCollegeId(){
+        List<Integer> idList=new ArrayList<>();
+        String SQL="SELECT c_id FROM college";
+        ResultSet rs=MySQLUtil.doDQL(SQL);
+        try{
+            while (rs.next()){
+                int id=rs.getInt(1);
+                idList.add(id);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return idList;
     }
 }

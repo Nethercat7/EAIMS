@@ -285,4 +285,27 @@ public class MajorModule {
         }
         return major;
     }
+
+    /**
+    *@param
+    *@Author 赵富源
+    *@Description 查询所有专业ID
+    *@Return java.util.List<java.lang.Integer>
+    */
+    public static List<Integer> queryAllMajorId(){
+        List<Integer> idList=new ArrayList<>();
+        String SQL="SELECT m_id FROM major";
+        ResultSet rs=MySQLUtil.doDQL(SQL);
+        try{
+            while (rs.next()){
+                int id=rs.getInt(1);
+                idList.add(id);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return idList;
+    }
 }

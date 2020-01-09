@@ -202,4 +202,26 @@ public class StudentModule {
         return student;
     }
 
+    /**
+     *@param
+     *@Author 赵富源
+     *@Description 查询最大学号
+     *@Return java.lang.String
+     */
+    public static String queryMaxStudentCode(){
+        String code="";
+        String SQL="SELECT MAX(student_code) FROM student";
+        ResultSet rs=MySQLUtil.doDQL(SQL);
+        try{
+            if(rs.next()){
+                code=rs.getNString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return code;
+    }
+
 }

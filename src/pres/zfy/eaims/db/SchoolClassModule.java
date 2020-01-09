@@ -258,4 +258,29 @@ public class SchoolClassModule {
        }
        return name;
    }
+
+   /**
+   *@param
+   *@Author 赵富源
+   *@Description 查询所有班级Id
+   *@Return java.util.List<java.lang.Integer>
+   */
+   public static List<Integer> queryAllClassId(){
+       List<Integer> idList=new ArrayList<>();
+       String SQL="SELECT class_id FROM class";
+       ResultSet rs=MySQLUtil.doDQL(SQL);
+       try{
+           while (rs.next()){
+               int id=rs.getInt(1);
+               idList.add(id);
+           }
+       } catch (SQLException e) {
+           System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+       }finally {
+           MySQLUtil.closeAll();
+       }
+       return idList;
+   }
+
+
 }

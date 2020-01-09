@@ -4,6 +4,8 @@ import pres.zfy.eaims.utils.MySQLUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 *@Description:专业与院系的关系模块
@@ -90,5 +92,31 @@ public class McRelationModule {
             MySQLUtil.closeAll();
         }
         return mcrId;
+    }
+
+    /**
+    *@param collegeId
+    *@Author 赵富源
+    *@Description 查询院系下的所有专业ID
+    *@Return java.util.List<java.lang.Integer>
+    */
+    public static List<Integer> queryAllMajorInCollege(int collegeId){
+        List<Integer> idList=new ArrayList<>();
+        String SQL="SELECT mcr_major_id FROM mc_relation\n" +
+                "LEFT JOIN college\n" +
+                "\tON mc_relation.mcr_college_id=college.c_id\n" +
+                "WHERE college.c_id=?";
+        ResultSet rs=MySQLUtil.doDQL(SQL,collegeId);
+        try{
+            while(rs.next()){
+                int id=rs.getInt(1);
+                idList.add(id);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return idList;
     }
 }

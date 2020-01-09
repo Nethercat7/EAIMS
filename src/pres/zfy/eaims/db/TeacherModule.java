@@ -273,10 +273,32 @@ public class TeacherModule {
                 teacher.settUpdateTime(rs.getTimestamp("t_update_time"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
         } finally {
             MySQLUtil.closeAll();
         }
         return teacher;
+    }
+
+    /**
+    *@param
+    *@Author 赵富源
+    *@Description 查询最大职工号
+    *@Return java.lang.String
+    */
+    public static String queryMaxAccount(){
+        String account="";
+        String SQL="SELECT MAX(t_account) FROM teacher";
+        ResultSet rs= MySQLUtil.doDQL(SQL);
+        try{
+            if(rs.next()){
+                account=rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return account;
     }
 }

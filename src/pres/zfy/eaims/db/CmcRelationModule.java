@@ -4,6 +4,8 @@ import pres.zfy.eaims.utils.MySQLUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description:班级关系模块
@@ -93,7 +95,29 @@ public class CmcRelationModule {
         return status;
     }
 
-
-
-
+    /**
+     *@param majorId
+     *@Author 赵富源
+     *@Description 查询专业下的所有班级ID
+     *@Return java.util.List<java.lang.Integer>
+     */
+    public static List<Integer> queryAllClassIdInMajor(int majorId){
+        List<Integer> idList=new ArrayList<>();
+        String SQL="SELECT cmcr_class_id FROM cmc_relation\n" +
+                "LEFT JOIN major\n" +
+                "\tON cmc_relation.cmcr_major_id=major.m_id\n" +
+                "WHERE major.m_id=?";
+        ResultSet rs=MySQLUtil.doDQL(SQL,majorId);
+        try{
+            while(rs.next()){
+                int id=rs.getInt(1);
+                idList.add(id);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return idList;
+    }
 }
