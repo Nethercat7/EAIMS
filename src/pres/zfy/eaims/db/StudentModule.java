@@ -153,7 +153,7 @@ public class StudentModule {
      * @Description 通过学生学号查询ID；
      * @Return int
      */
-    public static int queryStudentId(String code) {
+    public static int queryStudentIdByCode(String code) {
         int id = 0;
         String SQL = "SELECT student_id FROM student WHERE student_code=?";
         ResultSet rs = MySQLUtil.doDQL(SQL, code);
@@ -222,6 +222,28 @@ public class StudentModule {
             MySQLUtil.closeAll();
         }
         return code;
+    }
+
+    /**
+    *@param phoneNumber
+    *@Author 赵富源
+    *@Description 通过电话号码查询学生ID
+    *@Return int
+    */
+    public static int queryStudentIdByPhoneNumber(String phoneNumber){
+        int id=0;
+        String SQL="SELECT student_id FROM student WHERE student_tel=?";
+        ResultSet rs=MySQLUtil.doDQL(SQL,phoneNumber);
+        try{
+            if(rs.next()){
+                id=rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return id;
     }
 
 }

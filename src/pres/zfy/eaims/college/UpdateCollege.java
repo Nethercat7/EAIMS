@@ -24,6 +24,9 @@ public class UpdateCollege extends JFrame {
     JButton confirmBtn;
     JButton cancelBtn;
 
+    String currentCode;//更新之前的院系代码，用于判断是否存在
+    String currentName;//更新之前院系名称，用于判断是否存在
+
     public UpdateCollege() {
         row1 = new JPanel();
         code = new JLabel("院系编号：");
@@ -39,6 +42,8 @@ public class UpdateCollege extends JFrame {
             if (!"".equals(code)) {
                 College college = CollegeModule.queryCollegeByCode(code);
                 if (college.getcCode() != null) {
+                    currentCode = college.getcCode();
+                    currentName = college.getcName();
                     new CollegeInfo(college);
                     dispose();
                 } else {
@@ -112,6 +117,10 @@ public class UpdateCollege extends JFrame {
                     SimsUtil.setErrorMessage("院系编号最大长度为30");
                 } else if (nameText.getText().length() > 70) {
                     SimsUtil.setErrorMessage("院系名称最大长度为70");
+                } else if (CollegeModule.queryCollegeIdByCode(cCodeText.getText()) != 0 && !cCodeText.getText().equals(currentCode)) {
+                    SimsUtil.setErrorMessage("院系代码已经存在");
+                } else if (CollegeModule.queryCollegeIdByName(nameText.getText()) != 0 && !nameText.getText().equals(currentName)) {
+                    SimsUtil.setErrorMessage("院系名称已经存在");
                 } else {
                     college.setcId(CollegeModule.queryCollegeByCode(codeText.getText()).getcId());
                     college.setcCode(cCodeText.getText());
@@ -121,7 +130,7 @@ public class UpdateCollege extends JFrame {
                     int status = CollegeModule.updCollegeById(college);
                     if (status > 0) {
                         SimsUtil.setInfoMessage("更新成功");
-                        setTitle(nameText.getText());
+                        dispose();
                     } else {
                         SimsUtil.setErrorMessage("更新失败");
                     }

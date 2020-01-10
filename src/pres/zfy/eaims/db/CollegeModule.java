@@ -237,4 +237,26 @@ public class CollegeModule {
         }
         return idList;
     }
+
+    /**
+    *@param code
+    *@Author 赵富源
+    *@Description 通过学院代码查询学院ID
+    *@Return int
+    */
+    public static int queryCollegeIdByCode(String code){
+        int id=0;
+        String SQL="SELECT c_id FROM college WHERE c_code=?";
+        ResultSet rs=MySQLUtil.doDQL(SQL,code);
+        try{
+            if (rs.next()){
+                id=rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return id;
+    }
 }

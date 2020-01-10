@@ -308,4 +308,26 @@ public class MajorModule {
         }
         return idList;
     }
+
+    /**
+    *@param code
+    *@Author 赵富源
+    *@Description 通过专业代码查询专业ID
+    *@Return int
+    */
+    public static int queryMajorIdByCode(String code){
+        int id=0;
+        String SQL="SELECT m_id FROM major WHERE m_code=?";
+        ResultSet rs=MySQLUtil.doDQL(SQL,code);
+        try{
+            if(rs.next()){
+                id=rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return id;
+    }
 }

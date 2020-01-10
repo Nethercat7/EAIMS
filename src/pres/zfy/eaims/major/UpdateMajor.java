@@ -28,6 +28,9 @@ public class UpdateMajor extends JFrame {
     JButton confirmBtn;
     JButton cancelBtn;
 
+    String currentCode;
+    String currentName;
+
     public UpdateMajor() {
         row1 = new JPanel();
         code = new JLabel("专业编号：");
@@ -43,6 +46,8 @@ public class UpdateMajor extends JFrame {
             if (!"".equals(code)) {
                 Major major = MajorModule.queryMajorByCode(code);
                 if (major.getmCode() != null) {
+                    currentCode = major.getmCode();
+                    currentName = major.getmName();
                     new CollegeInfo(major);
                     dispose();
                 } else {
@@ -72,7 +77,7 @@ public class UpdateMajor extends JFrame {
     }
 
     //子窗口
-    private static class CollegeInfo extends JFrame {
+    private class CollegeInfo extends JFrame {
         JPanel row1;
         JPanel row2;
         JPanel row3;
@@ -133,6 +138,10 @@ public class UpdateMajor extends JFrame {
                     SimsUtil.setErrorMessage("专业代码最大为30位");
                 } else if (nameText.getText().length() > 30) {
                     SimsUtil.setErrorMessage("专业名称最大为30位");
+                } else if (MajorModule.queryMajorIdByCode(mCodeText.getText()) != 0 && !mCodeText.getText().equals(currentCode)) {
+                    SimsUtil.setErrorMessage("专业编号已存在");
+                } else if (MajorModule.queryMajorIdByName(nameText.getText()) != 0 && !nameText.getText().equals(currentName)) {
+                    SimsUtil.setErrorMessage("专业名称已存在");
                 } else {
                     major.setmCode(mCodeText.getText());
                     major.setmName(nameText.getText());
@@ -170,7 +179,7 @@ public class UpdateMajor extends JFrame {
             int status = MajorModule.updMajorById(major);
             if (status > 0) {
                 SimsUtil.setInfoMessage("更新 " + major.getmName() + " 的数据成功");
-                setTitle(major.getmName());
+                dispose();
                 int isExit = McRelationModule.queryMcrIdByMajorId(major.getmId());
                 int status2 = 0;
                 if (isExit > 0) {

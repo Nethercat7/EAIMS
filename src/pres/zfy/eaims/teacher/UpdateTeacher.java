@@ -28,6 +28,10 @@ public class UpdateTeacher extends JFrame {
     JButton confirmBtn;
     JButton cancelBtn;
 
+    String currentAccount;
+    String currentTel;
+    String currentEmail;
+
     public UpdateTeacher() {
         row1 = new JPanel();
         account = new JLabel("工号：");
@@ -47,6 +51,9 @@ public class UpdateTeacher extends JFrame {
             } else {
                 Teacher teacher = TeacherModule.queryTeacherByAccount(account);
                 if (teacher.gettAccount() != null) {
+                    currentAccount = teacher.gettAccount();
+                    currentTel = teacher.gettTel();
+                    currentEmail = teacher.gettEmail();
                     new TeacherInfo(teacher);
                     dispose();
                 } else {
@@ -74,7 +81,7 @@ public class UpdateTeacher extends JFrame {
     }
 
     //子窗口
-    private static class TeacherInfo extends JFrame {
+    private class TeacherInfo extends JFrame {
         JPanel row1;
         JPanel row2;
         JPanel row3;
@@ -210,6 +217,12 @@ public class UpdateTeacher extends JFrame {
                     SimsUtil.setErrorMessage("工号的长度不能大于13位");
                 } else if (name.length() > 13) {
                     SimsUtil.setErrorMessage("名字不能大于13位");
+                } else if (TeacherModule.queryTeacherIdByAccount(account) > 0 && !account.equals(currentAccount)) {
+                    SimsUtil.setErrorMessage("工号已存在");
+                } else if (TeacherModule.queryTeacherIdByTel(tel) > 0 && !tel.equals(currentTel)) {
+                    SimsUtil.setErrorMessage("电话号码已存在");
+                } else if (TeacherModule.queryTeacherIdByEmail(email) > 0 && !email.equals(currentEmail)) {
+                    SimsUtil.setErrorMessage("电子邮箱已存在");
                 } else {
                     teacher.settAccount(account);
                     teacher.settName(name);
@@ -248,10 +261,10 @@ public class UpdateTeacher extends JFrame {
          * @Return void
          */
         private void updTeacher(Teacher teacher) {
-            int status = TeacherModule.updTeacherByAccount(teacher);
+            int status = TeacherModule.updTeacherById(teacher);
             if (status > 0) {
                 SimsUtil.setInfoMessage("成功更新" + teacher.gettName() + "的资料");
-                setTitle(teacher.gettName());
+                dispose();
                 int status2;
                 int tcrId = TcRelationModule.queryTcrIdByTeacherId(teacher.gettId());
                 //如果原先已经有所属院系信息就更新，没有则添加

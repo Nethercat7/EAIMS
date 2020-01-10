@@ -29,6 +29,9 @@ public class UpdStudent extends JFrame {
     JButton confirmBtn;
     JButton cancelBtn;
 
+    String currentCode;
+    String currentTel;
+
     public UpdStudent() {
         row1 = new JPanel();
         code = new JLabel("学号：");
@@ -48,6 +51,8 @@ public class UpdStudent extends JFrame {
             } else {
                 Student student = StudentModule.queryStudentByCode(code);
                 if (student.getStudentCode() != null) {
+                    currentCode = student.getStudentCode();
+                    currentTel = student.getStudentTel();
                     new UpdFrame(student);
                     dispose();
                 } else {
@@ -275,6 +280,10 @@ public class UpdStudent extends JFrame {
                     SimsUtil.setErrorMessage("学号最大长度为13位");
                 } else if (name.length() > 13) {
                     SimsUtil.setErrorMessage("姓名最大长度为13位");
+                } else if (StudentModule.queryStudentIdByCode(codeText.getText()) > 0 && !codeText.getText().equals(currentCode)) {
+                    SimsUtil.setErrorMessage("学号已存在");
+                } else if (StudentModule.queryStudentIdByPhoneNumber(telText.getText())>0 && !telText.getText().equals(currentTel)) {
+                    SimsUtil.setErrorMessage("电话号码已存在");
                 } else {
                     student.setStudentCode(code);
                     student.setStudentName(name);
@@ -367,6 +376,8 @@ public class UpdStudent extends JFrame {
                 }
                 if (status2 < 0) {
                     SimsUtil.setErrorMessage("更新学生关系时发生错误");
+                }else{
+                    dispose();
                 }
             } else {
                 SimsUtil.setErrorMessage("更新学生信息时发生错误");

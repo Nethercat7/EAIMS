@@ -31,6 +31,9 @@ public class UpdateSchoolClass extends JFrame {
     JButton confirmBtn;
     JButton cancelBtn;
 
+    String currentCode;
+    String currentName;
+
     public UpdateSchoolClass() {
         row1 = new JPanel();
         code = new JLabel("班级编号：");
@@ -46,6 +49,8 @@ public class UpdateSchoolClass extends JFrame {
             if (!"".equals(code)) {
                 SchoolClass schoolClass = SchoolClassModule.queryClassByClassCode(code);
                 if (schoolClass.getClassCode() != null) {
+                    currentCode = schoolClass.getClassCode();
+                    currentName = schoolClass.getClassName();
                     new SchoolClassInfo(schoolClass);
                     dispose();
                 } else {
@@ -174,6 +179,10 @@ public class UpdateSchoolClass extends JFrame {
                     SimsUtil.setErrorMessage("班级编号最大长度为30");
                 } else if (name.length() > 30) {
                     SimsUtil.setErrorMessage("班级名称最大长度为30");
+                } else if (SchoolClassModule.queryClassIdByCode(sCodeText.getText()) > 0 && !sCodeText.getText().equals(currentCode)) {
+                    SimsUtil.setErrorMessage("班级编号已存在");
+                } else if (SchoolClassModule.queryClassIdByName(nameText.getText()) > 0 && !nameText.getText().equals(currentName)) {
+                    SimsUtil.setErrorMessage("班级名称已存在");
                 } else {
                     schoolClass.setClassId(schoolClass.getClassId());
                     schoolClass.setClassCode(sCode);
@@ -215,7 +224,7 @@ public class UpdateSchoolClass extends JFrame {
             int status = SchoolClassModule.updSchoolClassById(schoolClass);
             if (status > 0) {
                 SimsUtil.setInfoMessage("更新 " + schoolClass.getClassName() + " 信息成功");
-                setTitle(schoolClass.getClassName());
+                dispose();
                 //更新关系
                 int isExist = CmcRelationModule.queryCmcrIdByClassId(schoolClass.getClassId());
                 int status2 = 0;

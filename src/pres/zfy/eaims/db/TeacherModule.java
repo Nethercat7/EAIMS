@@ -215,11 +215,11 @@ public class TeacherModule {
      * @Description 通过工号更新教师
      * @Return int
      */
-    public static int updTeacherByAccount(Teacher teacher) {
+    public static int updTeacherById(Teacher teacher) {
         int status = 0;
         try {
-            String SQL = "UPDATE teacher SET t_name=?,t_gender=?,t_tel=?,t_email=?,t_remark=?,t_update_time=? WHERE t_account=?";
-            status = MySQLUtil.doDML(SQL, teacher.gettName(), teacher.gettGender(), teacher.gettTel(), teacher.gettEmail(), teacher.gettRemark(), teacher.gettUpdateTime(), teacher.gettAccount());
+            String SQL = "UPDATE teacher SET t_account=?,t_name=?,t_gender=?,t_tel=?,t_email=?,t_remark=?,t_update_time=? WHERE t_id=?";
+            status = MySQLUtil.doDML(SQL, teacher.gettAccount(),teacher.gettName(), teacher.gettGender(), teacher.gettTel(), teacher.gettEmail(), teacher.gettRemark(), teacher.gettUpdateTime(), teacher.gettId());
         } catch (Exception e) {
             System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
         } finally {
@@ -300,5 +300,71 @@ public class TeacherModule {
             MySQLUtil.closeAll();
         }
         return account;
+    }
+
+    /**
+    *@param account
+    *@Author 赵富源
+    *@Description 通过工号查询教师ID
+    *@Return int
+    */
+    public static int queryTeacherIdByAccount(String account){
+        int id=0;
+        String SQL="SELECT t_id FROM teacher WHERE t_account=?";
+        ResultSet rs=MySQLUtil.doDQL(SQL,account);
+        try{
+            if(rs.next()){
+                id=rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return id;
+    }
+
+    /**
+    *@param tel
+    *@Author 赵富源
+    *@Description 通过电话号码查询教师ID
+    *@Return int
+    */
+    public static int queryTeacherIdByTel(String tel){
+        int id=0;
+        String SQL="SELECT t_id FROM teacher WHERE t_tel=?";
+        ResultSet rs=MySQLUtil.doDQL(SQL,tel);
+        try{
+            if(rs.next()){
+                id=rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return id;
+    }
+
+    /**
+    *@param email
+    *@Author 赵富源
+    *@Description 通过电子邮箱地址查询教师ID
+    *@Return int
+    */
+    public static int queryTeacherIdByEmail(String email){
+        int id=0;
+        String SQL="SELECT t_id FROM teacher WHERE t_email=?";
+        ResultSet rs=MySQLUtil.doDQL(SQL,email);
+        try{
+            if(rs.next()){
+                id=rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(new Exception().getStackTrace()[0].getMethodName() + " 发生错误：" + e.getMessage());
+        }finally {
+            MySQLUtil.closeAll();
+        }
+        return id;
     }
 }
